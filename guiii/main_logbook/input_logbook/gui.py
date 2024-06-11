@@ -7,7 +7,9 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame
+import tkinter as tk
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame, StringVar, messagebox, filedialog
+import controller as db_controller
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -28,6 +30,8 @@ class InputLogbook(Frame):
     def __init__(self, parent, controller=None, *args, **kwargs):
         Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
+        self.data = {"nama": StringVar(), "npm": StringVar(), "tanggal": StringVar(), "nama_dosen": StringVar(), "tugas": StringVar(), "tujuan": StringVar(), "permasalahan_skripsi": StringVar(), "solusi": StringVar(), "tugas_minggu_depan": StringVar(), "status_validasi": StringVar()}
+        self.progress_skripsi = None
         self.canvas = Canvas(
             self,
             bg = "#313131",
@@ -46,15 +50,16 @@ class InputLogbook(Frame):
             54.5,
             image=self.entry_image_1
         )
-        self.entry_1 = Entry(
+        entry_1 = Entry(
             self,
+            textvariable=self.data["nama"],
             bd=0,
             bg="#D9D9D9",
             fg="#000716",
             highlightthickness=0,
             font=("Inter BoldItalic", 14 * -1)
         )
-        self.entry_1.place(
+        entry_1.place(
             x=32.0,
             y=32.0,
             width=175.0,
@@ -68,7 +73,7 @@ class InputLogbook(Frame):
             207.5,
             image=self.entry_image_2
         )
-        self.entry_2 = Text(
+        entry_2 = Text(
             self,
             bd=0,
             bg="#D9D9D9",
@@ -76,12 +81,16 @@ class InputLogbook(Frame):
             highlightthickness=0,
             font=("Inter BoldItalic", 14 * -1)
         )
-        self.entry_2.place(
+        entry_2.place(
             x=27.0,
             y=114.0,
             width=266.0,
             height=189.0
         )
+        
+        entry_2.insert(tk.END, self.data["tugas"].get())
+        entry_2.bind("<<Modified>>", lambda event: self.update_tujuan(event, "tugas"))
+
 
         self.entry_image_3 = PhotoImage(
             file=relative_to_assets("entry_12.png"))
@@ -90,7 +99,7 @@ class InputLogbook(Frame):
             433.5,
             image=self.entry_image_3
         )
-        self.entry_3 = Text(
+        entry_3 = Text(
             self,
             bd=0,
             bg="#D9D9D9",
@@ -98,12 +107,14 @@ class InputLogbook(Frame):
             highlightthickness=0,
             font=("Inter BoldItalic", 14 * -1)
         )
-        self.entry_3.place(
+        entry_3.place(
             x=374.0,
             y=340.0,
             width=266.0,
             height=189.0
         )
+        entry_3.insert(tk.END, self.data["tugas_minggu_depan"].get())
+        entry_3.bind("<<Modified>>", lambda event: self.update_tujuan(event, "tugas_minggu_depan"))
 
         #entry_image_4 = PhotoImage(
         #    file=relative_to_assets("entry_4.png"))
@@ -132,7 +143,7 @@ class InputLogbook(Frame):
             207.5,
             image=self.entry_image_5
         )
-        self.entry_5 = Text(
+        entry_5 = Text(
             self,
             bd=0,
             bg="#D9D9D9",
@@ -140,12 +151,15 @@ class InputLogbook(Frame):
             highlightthickness=0,
             font=("Inter BoldItalic", 14 * -1)
         )
-        self.entry_5.place(
+        entry_5.place(
             x=370.0,
             y=114.0,
             width=266.0,
             height=189.0
         )
+
+        entry_5.insert(tk.END, self.data["tujuan"].get())
+        entry_5.bind("<<Modified>>", lambda event: self.update_tujuan(event, "tujuan"))
 
         self.entry_image_6 = PhotoImage(
             file=relative_to_assets("entry_12.png"))
@@ -154,7 +168,7 @@ class InputLogbook(Frame):
             207.5,
             image=self.entry_image_6
         )
-        self.entry_6 = Text(
+        entry_6 = Text(
             self,
             bd=0,
             bg="#D9D9D9",
@@ -162,12 +176,14 @@ class InputLogbook(Frame):
             highlightthickness=0,
             font=("Inter BoldItalic", 14 * -1)
         )
-        self.entry_6.place(
+        entry_6.place(
             x=692.0,
             y=114.0,
             width=266.0,
             height=189.0
         )
+        entry_6.insert(tk.END, self.data["permasalahan_skripsi"].get())
+        entry_6.bind("<<Modified>>", lambda event: self.update_tujuan(event, "permasalahan_skripsi"))
 
         self.entry_image_7 = PhotoImage(
             file=relative_to_assets("entry_12.png"))
@@ -176,7 +192,7 @@ class InputLogbook(Frame):
             433.5,
             image=self.entry_image_7
         )
-        self.entry_7 = Text(
+        entry_7 = Text(
             self,
             bd=0,
             bg="#D9D9D9",
@@ -184,12 +200,14 @@ class InputLogbook(Frame):
             highlightthickness=0,
             font=("Inter BoldItalic", 14 * -1)
         )
-        self.entry_7.place(
+        entry_7.place(
             x=27.0,
             y=340.0,
             width=266.0,
             height=189.0
         )
+        entry_7.insert(tk.END, self.data["solusi"].get())
+        entry_7.bind("<<Modified>>", lambda event: self.update_tujuan(event, "solusi"))
 
         self.image_image_1 = PhotoImage(
             file=relative_to_assets("image_1.png"))
@@ -222,7 +240,7 @@ class InputLogbook(Frame):
             image=self.button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_1 clicked"),
+            command=self.save,
             activebackground="#313131",
             relief="flat"
         )
@@ -240,7 +258,7 @@ class InputLogbook(Frame):
             image=self.button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_2 clicked"),
+            command=self.open_file_dialog,
             activebackground="#313131",
             relief="flat"
         )
@@ -308,6 +326,7 @@ class InputLogbook(Frame):
         )
         entry_8 = Entry(
             self,
+            textvariable=self.data["npm"],
             bd=0,
             bg="#D9D9D9",
             fg="#000716",
@@ -330,6 +349,7 @@ class InputLogbook(Frame):
         )
         entry_9 = Entry(
             self,
+            textvariable=self.data["tanggal"],
             bd=0,
             bg="#D9D9D9",
             fg="#000716",
@@ -353,6 +373,7 @@ class InputLogbook(Frame):
         )
         entry_10 = Entry(
             self,
+            textvariable=self.data["nama_dosen"],
             bd=0,
             bg="#D9D9D9",
             fg="#000716",
@@ -381,6 +402,84 @@ class InputLogbook(Frame):
             width=45.0,
             height=36.0
         )
+        self.image_image_10 = PhotoImage(
+            file=relative_to_assets("image_11.png"))
+        image_9 = self.canvas.create_image(
+            744.0,
+            322.0,
+            image=self.image_image_10
+        )
+        self.entry_image_11 = PhotoImage(
+            file=relative_to_assets("entry_15.png"))
+        entry_bg_11 = self.canvas.create_image(
+            779.5,
+            360.5,
+            image=self.entry_image_11
+        )
+        entry_11 = Entry(
+            self,
+            textvariable=self.data["status_validasi"],
+            bd=0,
+            bg="#283948",
+            fg="#000716",
+            highlightthickness=0,
+            font=("Inter BoldItalic", 14 * -1)
+
+        )
+        entry_11.place(
+            x=692.0,
+            y=336.0,
+            width=175.0,
+            height=43.0
+        )
+    def update_tujuan(self, event, key):
+        widget = event.widget
+        self.data[key].set(widget.get("1.0", tk.END).strip())
+        widget.edit_modified(False)
+        
+    def open_file_dialog(self):
+        file_path = filedialog.askopenfilename()
+        if file_path:
+            self.progress_skripsi_path = file_path
+            print(f"Selected file: {file_path}")
+    
+    
+    
+    def save(self):
+        # check if any fields are empty
+        for key, val in self.data.items():
+            if not val.get():
+                messagebox.showinfo("Error", "Please fill in all the fields")
+                return
+
+        if not self.progress_skripsi_path:
+            messagebox.showinfo("Error", "Please select a file for progress_skripsi")
+            return
+
+        # Save the room
+        result = db_controller.add_logbook(
+            self.data["nama"].get(), self.data["npm"].get(), self.data["tanggal"].get(),
+            self.data["nama_dosen"].get(), self.data["tugas"].get(), self.data["tujuan"].get(),
+            self.data["permasalahan_skripsi"].get(), self.data["solusi"].get(),
+            self.data["tugas_minggu_depan"].get(), self.progress_skripsi_path,
+            self.data["status_validasi"].get()
+        )
+
+
+        if result:
+            messagebox.showinfo("Success", "Logbook added successfully")
+            self.parent.navigate("viewlgbk")
+            self.parent.windows.get("viewlgbk").handle_refresh()
+            # clear all fields
+            for label in self.data.keys():
+                self.data[label].set("")  
+        else:
+            messagebox.showerror("Error", "Unable to add logbook. Please ensure the data is valid.")
+
+    
+        
+        
+        
 
 #window.resizable(False, False)
 #window.mainloop()

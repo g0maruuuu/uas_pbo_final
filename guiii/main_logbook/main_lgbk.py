@@ -2,6 +2,7 @@ from pathlib import Path
 from tkinter import *
 from .view_logbook.gui import ViewLogbook
 from .input_logbook.gui import InputLogbook
+import controller as db_controller
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r".\assets\frame0")
 
@@ -13,15 +14,15 @@ def mainlgbk():
     MainLogbook()
 
 class MainLogbook(Frame):
-    def __init__(self, parent, controller=None, *args, **kwargs):
+    def __init__(self, parent, user_npm, controller=None, *args, **kwargs):
         Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
-        
+        self.user_npm = user_npm
         # Set the background color
         self.configure(bg="#313131")
 
         self.windows = {
-            "viewlgbk": ViewLogbook(self),
+            "viewlgbk": ViewLogbook(self,user_npm),
             "inptlgbk": InputLogbook(self),
         }
 
