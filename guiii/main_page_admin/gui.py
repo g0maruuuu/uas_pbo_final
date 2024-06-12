@@ -15,12 +15,13 @@ ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\py_code\pbo_uas\guiii\main_page_admi
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-def mainPageAdmin():
-    MainPageAdmin()
+def mainPageAdmin(user_nidn):
+    MainPageAdmin(user_nidn)
 
 class MainPageAdmin(Toplevel):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, user_nidn, *args, **kwargs):
         Toplevel.__init__(self, *args, **kwargs)
+        self.user_nidn = user_nidn
         self.geometry("1200x700")
         self.configure(bg="#313131")
         self.current_window = None
@@ -98,9 +99,9 @@ class MainPageAdmin(Toplevel):
         )
 
         self.windows = {
-            "main_mng": MainMNG(self),
-            "management_pembimbing": ManagementPembimbingDosen(self),
-            "mdl": ModulPembimbingDosen(self),
+            "main_mng": MainMNG(self, user_nidn),
+            "management_pembimbing": ManagementPembimbingDosen(self, user_nidn),
+            "mdl": ModulPembimbingDosen(self, user_nidn),
         }
 
         self.handle_btn_press(self.button_1, "main_mng")
@@ -111,24 +112,17 @@ class MainPageAdmin(Toplevel):
     
     def handle_btn_press(self, caller, name):
         print(f"Switching to window: {name}")  # Debug statement
-        # Hide all screens
+        if not hasattr(self, 'windows'):
+            print("Error: 'windows' attribute not found")
+            return
         if self.current_window:
             self.current_window.place_forget()
-        #for window in self.windows.values():
-            #window.place_forget()
 
-        # Set current Window
         self.current_window = self.windows.get(name)
-
-        self.windows[name].place(x=101, y=34, width=1099.0, height=666.0)
-
-        # Show the screen of the button pressed
-        #if self.current_window:
-            #self.current_window.place(x=101, y=34, width=1099.0, height=666.0)
-            #self.current_window.tkraise()
-        #else:
-            #print(f"Window with name {name} not found")  # Debug statement
-
+        if self.current_window:
+            self.current_window.place(x=101, y=34, width=1099.0, height=666.0)
+        else:
+            print(f"Error: Window '{name}' not found in windows dictionary")
 
         
 

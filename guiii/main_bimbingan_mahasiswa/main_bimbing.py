@@ -13,16 +13,16 @@ def mainbimbing():
     MainBimbing()
 
 class MainBimbing(Frame):
-    def __init__(self, parent, controller=None, *args, **kwargs):
+    def __init__(self, parent, user_npm, controller=None, *args, **kwargs):
         Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
-        
+        self.user_npm = user_npm
         # Set the background color
         self.configure(bg="#313131")
 
         self.windows = {
-            "mdlsis": ModulBimbinganMahasiswa(self),
-            "bimb": BimbinganMahasiswa(self),
+            "mdlsis": ModulBimbinganMahasiswa(self, user_npm),
+            "bimb": BimbinganMahasiswa(self, user_npm),
         }
 
 

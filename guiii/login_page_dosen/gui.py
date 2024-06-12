@@ -29,10 +29,10 @@ def login_dosen():
 
 class LoginDosen(Toplevel):
     def loginFunc(self):
-        user_npm = db_controller.checkUserMahasiswa(self.username.get().lower(), self.password.get())
-        if user_npm:
+        user_nidn = db_controller.checkUserDosen(self.username.get().lower(), self.password.get())
+        if user_nidn:
             self.destroy()
-            mainpage(user_npm)
+            mainPageAdmin(user_nidn)
         else:
             messagebox.showerror(
                 title="Invalid Credentials",

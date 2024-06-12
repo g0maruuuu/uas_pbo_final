@@ -87,18 +87,127 @@ def checkUserMahasiswa(username, password=None):
         connection.close()
 
 def checkUserDosen(username, password=None):
-    cmd = f"Select count(username) from admin where username='{username}' and BINARY password='{password}'"
+    cmd = "SELECT nidn FROM admin WHERE username=%s AND BINARY password=%s"
     try:
         connection =getdbconn()
         cursor = connection.cursor(buffered=True)
-        cursor.execute(cmd)
-        cmd = None
-        a = cursor.fetchone()[0] >= 1
-        return a
+        cursor.execute(cmd, (username, password))
+        result = cursor.fetchone()
+        return result[0] if result else None
     except mysql.connector.Error as err:
                 print(f"Error: {err}")
                 return False
     finally:
         cursor.close()
-        connection.close()    
+        connection.close()  
 
+
+def add_bimbingan(npm, nama, judul_skripsi, nidn, file_skripsi_path, tanggal):
+    cmd = """
+    INSERT INTO bimbingan_mahasiswa (
+        npm, nama_mahasiswa, judul_skripsi, nidn, file_skripsi, tanggal
+    ) 
+    VALUES (%s, %s, %s, %s, %s, %s);
+    """
+
+    try:
+        # Execute the command with parameters
+        connection =getdbconn()
+        cursor = connection.cursor(buffered=True)
+
+        cursor.execute(cmd, (
+            npm, nama, judul_skripsi, nidn, file_skripsi_path, tanggal
+        ))
+
+        connection.commit()  # Commit the transaction
+
+        result = cursor.rowcount > 0  # Check if the insert was successful
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        result = False
+    finally:
+        cursor.close()
+        connection.close()
+
+    return result
+
+def view_bimbingan(npm):
+    cmd = """
+    SELECT 
+        dbm.id_detail,
+        dbm.npm,
+        mp.tanggal,
+        mp.konsultasi_pembimbing,
+        mp.status_validasi,
+        bm.file_skripsi
+    FROM 
+        detail_bimbingan_mahasiswa dbm
+    JOIN 
+        management_pembimbing mp ON dbm.id_mng_pembimbing = mp.id
+    JOIN 
+        bimbingan_mahasiswa bm ON mp.id_bimbingan_mahasiswa = bm.id
+    WHERE 
+        dbm.npm = %s;
+    """
+    try:
+        connection = getdbconn()
+        cursor = connection.cursor(buffered=True)
+        cursor.execute(cmd, (npm,))
+        result = cursor.fetchall()
+        return result if cursor.rowcount > 0 else []
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
+
+def view_mng(nidn):
+    cmd = "SELECT id, nidn, npm, nama_mahasiswa, id_bimbingan_mahasiswa, tanggal, konsultasi_pembimbing, status_validasi FROM management_pembimbing WHERE nidn = %s"
+    try:
+        connection = getdbconn()
+        cursor = connection.cursor(buffered=True)
+        cursor.execute(cmd, (nidn,))
+        result = cursor.fetchall()
+        return result if cursor.rowcount > 0 else []
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()        
+
+def view_pengajuan_bmbg(nidn):
+    cmd = "SELECT id, npm, nama_mahasiswa, judul_skripsi, nidn, file_skripsi, tanggal FROM bimbingan_mahasiswa WHERE nidn = %s"
+    try:
+        connection = getdbconn()
+        cursor = connection.cursor(buffered=True)
+        cursor.execute(cmd, (nidn,))
+        result = cursor.fetchall()
+        return result if cursor.rowcount > 0 else []
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
+
+def add_bimbingan_dosen(nidn, npm, id_bimbingan_mahasiswa, tanggal, konsultasi_pembimbing, status_validasi):
+    cmd = "CALL insert_management_pembimbing(%s, %s, %s, %s, %s, %s);"
+
+    try:
+        connection = getdbconn()
+        cursor = connection.cursor(buffered=True)
+        cursor.execute(cmd, (
+            nidn, npm, id_bimbingan_mahasiswa, tanggal, konsultasi_pembimbing, status_validasi
+        ))
+        connection.commit()
+        result = cursor.rowcount > 0
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        result = False
+    finally:
+        cursor.close()
+        connection.close()
+
+    return result

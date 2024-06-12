@@ -14,16 +14,16 @@ def mainmng():
     MainMNG()
 
 class MainMNG(Frame):
-    def __init__(self, parent, controller=None, *args, **kwargs):
+    def __init__(self, parent, user_nidn, controller=None, *args, **kwargs):
         Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
-        
+        self.user_nidn = user_nidn
         # Set the background color
         self.configure(bg="#313131")
 
         self.windows = {
-            "mng": ManagementPembimbingDosen(self),
-            "mdl": ModulPembimbingDosen(self),
+            "mng": ManagementPembimbingDosen(self, user_nidn),
+            "mdl": ModulPembimbingDosen(self, user_nidn),
         }
 
 
@@ -42,3 +42,10 @@ class MainMNG(Frame):
             window.place_forget()
         self.current_window = self.windows.get(name)
         self.windows[name].place(x=0, y=0, width=1099, height=666)  
+
+    def show_modul_pembimbing_dosen(self, user_nidn, npm, id_bimbingan_mahasiswa):
+        # Create and place ModulPembimbingDosen window with the passed data
+        modul_pembimbing_dosen = ModulPembimbingDosen(self, user_nidn, npm, id_bimbingan_mahasiswa)
+        modul_pembimbing_dosen.place(x=0, y=0, width=1099, height=666)
+        modul_pembimbing_dosen.tkraise()
+        self.current_window = modul_pembimbing_dosen    

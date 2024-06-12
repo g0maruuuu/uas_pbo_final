@@ -7,8 +7,9 @@ from pathlib import Path
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame
-
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame, StringVar, filedialog, messagebox
+from tkPDFViewer import tkPDFViewer as pdf
+import controller as db_controller
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\py_code\pbo_uas\guiii\main_bimbingan_mahasiswa\modul_bimbingan_mahasiswa\assets\frame0")
@@ -25,9 +26,12 @@ def modulsiswa():
 #window.configure(bg = "#313131")
 
 class ModulBimbinganMahasiswa(Frame):
-    def __init__(self, parent, controller=None, *args, **kwargs):
+    def __init__(self, parent, user_npm, controller=None, *args, **kwargs):
         Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
+        self.user_npm =  user_npm
+        self.data = {"npm": StringVar(), "nama": StringVar(), "judul_skripsi": StringVar(), "nidn": StringVar(), "tanggal": StringVar()}
+        self.file_skripsi = None
         self.canvas = Canvas(
             self,
             bg = "#313131",
@@ -54,13 +58,13 @@ class ModulBimbinganMahasiswa(Frame):
             image=self.button_image_1,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_1 clicked"),
+            command=self.save,
             activebackground="#313131",
             relief="flat"
         )
         button_1.place(
             x=445.0,
-            y=552.0,
+            y=590.0,
             width=114.0,
             height=57.0
         )
@@ -72,24 +76,25 @@ class ModulBimbinganMahasiswa(Frame):
             image=self.button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_2 clicked"),
+            command=self.open_file_dialog,
             activebackground="#313131",
             relief="flat"
         )
         button_2.place(
             x=39.0,
-            y=475.0,
+            y=550.0,
             width=169.0,
             height=45.0
         )
 
-        self.image_image_2 = PhotoImage(
-            file=relative_to_assets("image_2.png"))
-        image_2 = self.canvas.create_image(
-            502.0,
-            254.0,
-            image=self.image_image_2
-        )
+        self.canvas.create_rectangle(
+            35.0,
+            205.0,
+            989.0,
+            500.0,
+            fill="#D9D9D9",
+            outline="")
+        
         self.button_image_3 = PhotoImage(file=relative_to_assets("button_3.png"))
         button_3 = Button(
             self,
@@ -106,3 +111,217 @@ class ModulBimbinganMahasiswa(Frame):
             width=45.0,
             height=36.0
         )
+
+        self.entry_image_1 = PhotoImage(
+            file=relative_to_assets("entry_1.png"))
+        entry_bg_1 = self.canvas.create_image(
+            138.5,
+            81.5,
+            image=self.entry_image_1
+        )
+        entry_1 = Entry(
+            self,
+            textvariable=self.data["nama"],
+            bd=0,
+            bg="#D9D9D9",
+            fg="#000716",
+            highlightthickness=0,
+            font=("Inter BoldItalic", 14 * -1)
+        )
+        entry_1.place(
+            x=51.0,
+            y=62.0,
+            width=175.0,
+            height=43.0
+        )
+
+        self.entry_image_2 = PhotoImage(
+            file=relative_to_assets("entry_1.png"))
+        entry_bg_2 = self.canvas.create_image(
+            138.5,
+            172.5,
+            image=self.entry_image_2
+        )
+        entry_2 = Entry(
+            self,
+            textvariable=self.data["judul_skripsi"],
+            bd=0,
+            bg="#D9D9D9",
+            fg="#000716",
+            highlightthickness=0,
+            font=("Inter BoldItalic", 14 * -1)
+        )
+        entry_2.place(
+            x=51.0,
+            y=153.0,
+            width=175.0,
+            height=43.0
+        )
+
+        self.image_image_2 = PhotoImage(
+            file=relative_to_assets("image_5.png"))
+        image_2 = self.canvas.create_image(
+            68.0,
+            44.0,
+            image=self.image_image_2
+        )
+
+        self.image_image_3 = PhotoImage(
+            file=relative_to_assets("image_9.png"))
+        image_3 = self.canvas.create_image(
+            91.0,
+            134.0,
+            image=self.image_image_3
+        )
+
+        self.image_image_4 = PhotoImage(
+            file=relative_to_assets("image_6.png"))
+        image_4 = self.canvas.create_image(
+            308.0,
+            44.0,
+            image=self.image_image_4
+        )
+
+        self.entry_image_3 = PhotoImage(
+            file=relative_to_assets("entry_1.png"))
+        entry_bg_3 = self.canvas.create_image(
+            381.5,
+            81.5,
+            image=self.entry_image_3
+        )
+        entry_3 = Entry(
+            self,
+            textvariable=self.data["npm"],
+            bd=0,
+            bg="#D9D9D9",
+            fg="#000716",
+            highlightthickness=0,
+            font=("Inter BoldItalic", 14 * -1)
+        )
+        entry_3.place(
+            x=294.0,
+            y=62.0,
+            width=175.0,
+            height=43.0
+        )
+
+        self.image_image_5 = PhotoImage(
+            file=relative_to_assets("image_7.png"))
+        image_5 = self.canvas.create_image(
+            558.0,
+            44.0,
+            image=self.image_image_5
+        )
+
+        self.image_image_6 = PhotoImage(
+            file=relative_to_assets("image_8.png"))
+        image_6 = self.canvas.create_image(
+            855.0,
+            44.0,
+            image=self.image_image_6
+        )
+
+        self.entry_image_4 = PhotoImage(
+            file=relative_to_assets("entry_1.png"))
+        entry_bg_4 = self.canvas.create_image(
+            620.5,
+            81.5,
+            image=self.entry_image_4
+        )
+        entry_4 = Entry(
+            self,
+            textvariable=self.data["tanggal"],
+            bd=0,
+            bg="#D9D9D9",
+            fg="#000716",
+            highlightthickness=0,
+            font=("Inter BoldItalic", 14 * -1)
+        )
+        entry_4.place(
+            x=533.0,
+            y=62.0,
+            width=175.0,
+            height=43.0
+        )
+
+        self.entry_image_5 = PhotoImage(
+            file=relative_to_assets("entry_1.png"))
+        entry_bg_5 = self.canvas.create_image(
+            859.5,
+            81.5,
+            image=self.entry_image_5
+        )
+        entry_5 = Entry(
+            self,
+            textvariable=self.data["nidn"],
+            bd=0,
+            bg="#D9D9D9",
+            fg="#000716",
+            highlightthickness=0,
+            font=("Inter BoldItalic", 14 * -1)
+        )
+        entry_5.place(
+            x=772.0,
+            y=62.0,
+            width=175.0,
+            height=43.0
+        )
+
+    def open_file_dialog(self):
+        file_path = filedialog.askopenfilename()
+        if file_path:
+            self.file_skripsi_path = file_path
+            print(f"Selected file: {file_path}")
+            self.open_pdf(self.file_skripsi_path)
+            
+    
+    def save(self):
+        # check if any fields are empty
+        for key, val in self.data.items():
+            if not val.get():
+                messagebox.showinfo("Error", "Please fill in all the fields")
+                return
+
+        if not self.file_skripsi_path:
+            messagebox.showinfo("Error", "Please select a file for progress_skripsi")
+            return
+
+        # Save the room
+        result = db_controller.add_bimbingan(
+            self.data["npm"].get(), self.data["nama"].get(), self.data["judul_skripsi"].get(),
+            self.data["nidn"].get(),self.file_skripsi_path, self.data["tanggal"].get()
+        )
+
+
+        if result:
+            messagebox.showinfo("Success", "bimbingan sudah diajukan")
+            self.parent.navigate("bimb")
+            #self.parent.windows.get("viewlgbk").handle_refresh()
+            # clear all fields
+            for label in self.data.keys():
+                self.data[label].set("")  
+        else:
+            messagebox.showerror("Error", "Unable to add logbook. Please ensure the data is valid.")
+
+    def open_pdf(self, pdf_path):
+        
+        # Create a new PDF viewer instance
+        pdf_viewer = pdf.ShowPdf()
+        
+        # Integrate the PDF viewer within the existing canvas
+        pdf_display = pdf_viewer.pdf_view(
+            self.canvas,
+            pdf_location=pdf_path,
+            width=200,
+            height=200,
+        )
+        
+        # Place the PDF viewer on the canvas
+        self.canvas.create_window(
+            510, 352,  # Centering the PDF viewer on the canvas
+            window=pdf_display,
+            tags="pdf_viewer",
+            height=295,
+            width=954
+        )
+    
