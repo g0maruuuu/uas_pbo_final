@@ -4,7 +4,7 @@ from pathlib import Path
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Toplevel, messagebox
 from ..main_page.gui import mainpage
-from ..main_page_admin.gui import mainPageAdmin
+#from ..main_page_admin.gui import mainPageAdmin
 import controller as db_controller
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\py_code\pbo_uas\guiii\login_page\assets\frame0")

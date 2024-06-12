@@ -9,6 +9,7 @@ from guiii.pembimbing_main.main_mng import MainMNG
 from guiii.pembimbing_main.management_pembimbing_dosen.gui import ManagementPembimbingDosen
 from guiii.pembimbing_main.modul_pembimbing_dosen.gui import ModulPembimbingDosen
 
+
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\py_code\pbo_uas\guiii\main_page_admin\assets\frame0")
 

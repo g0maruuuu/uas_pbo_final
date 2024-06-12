@@ -181,6 +181,7 @@ class ViewLogbook(Frame):
         pdf_window.title("PDF Viewer")
         pdf_window.geometry("800x600")
 
+         
         pdf_viewer = pdf.ShowPdf()
         pdf_display = pdf_viewer.pdf_view(pdf_window, pdf_location=pdf_path, width=100, height=100)
         pdf_display.pack(expand=True, fill='both')      

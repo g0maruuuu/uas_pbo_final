@@ -92,7 +92,7 @@ class BimbinganMahasiswa(Frame):
             image=self.button_image_3,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_3 clicked"),
+            command=self.fltr_aproved,
             activebackground="#313131",
             relief="flat"
         )
@@ -110,7 +110,7 @@ class BimbinganMahasiswa(Frame):
             image=self.button_image_4,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_4 clicked"),
+            command=self.fltr_pending,
             activebackground="#313131",
             relief="flat"
         )
@@ -128,7 +128,7 @@ class BimbinganMahasiswa(Frame):
             image=self.button_image_5,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_5 clicked"),
+            command=self.fltr_reject,
             activebackground="#313131",
             relief="flat"
         )
@@ -138,6 +138,24 @@ class BimbinganMahasiswa(Frame):
             width=94.0,
             height=60.0
         )
+        self.img_refresh = PhotoImage(
+            file=relative_to_assets("button.png"))
+        button_refresh = Button(
+            self,
+            image=self.img_refresh,
+            borderwidth=0,
+            highlightthickness=0,
+            command=self.handle_refresh,
+            activebackground="#313131",
+            relief="raised"
+        )
+        button_refresh.place(
+            x=948.0,
+            y=5.0,
+            width=42.0,
+            height=42.0
+        )  
+
         self.columns = {
             "id_detail": ["id_detail", 164],
             "npm": ["npm", 164],
@@ -217,7 +235,26 @@ class BimbinganMahasiswa(Frame):
 
         pdf_viewer = pdf.ShowPdf()
         pdf_display = pdf_viewer.pdf_view(pdf_window, pdf_location=pdf_path, width=100, height=100)
-        pdf_display.pack(expand=True, fill='both')       
+        pdf_display.pack(expand=True, fill='both')  
+
+    def fltr_aproved(self):
+        self.treeview.delete(*self.treeview.get_children())
+        self.bmbg_data = db_controller.fltr_apr()
+        for row in self.bmbg_data:
+            self.treeview.insert("", "end", values=row)
+
+    def fltr_reject(self):
+        self.treeview.delete(*self.treeview.get_children())
+        self.bmbg_data = db_controller.fltr_rjct()
+        for row in self.bmbg_data:
+            self.treeview.insert("", "end", values=row)        
+
+    def fltr_pending(self):
+        self.treeview.delete(*self.treeview.get_children())
+        self.bmbg_data = db_controller.fltr_pdng()
+        for row in self.bmbg_data:
+            self.treeview.insert("", "end", values=row)        
+         
 
 
 

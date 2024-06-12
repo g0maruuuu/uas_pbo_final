@@ -211,3 +211,48 @@ def add_bimbingan_dosen(nidn, npm, id_bimbingan_mahasiswa, tanggal, konsultasi_p
         connection.close()
 
     return result
+
+def fltr_apr():
+    cmd = "SELECT * FROM detail_bimbingan_mahasiswa WHERE id_mng_pembimbing IN (SELECT id FROM management_pembimbing WHERE status_validasi = 'approved');"
+    try:
+        connection = getdbconn()
+        cursor = connection.cursor(buffered=True)
+        cursor.execute(cmd)
+        result = cursor.fetchall()
+        return result if cursor.rowcount > 0 else []
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
+
+def fltr_rjct():
+    cmd = "SELECT * FROM detail_bimbingan_mahasiswa WHERE id_mng_pembimbing IN (SELECT id FROM management_pembimbing WHERE status_validasi = 'rejected');"
+    try:
+        connection = getdbconn()
+        cursor = connection.cursor(buffered=True)
+        cursor.execute(cmd)
+        result = cursor.fetchall()
+        return result if cursor.rowcount > 0 else []
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()
+
+def fltr_pdng():
+    cmd = "SELECT * FROM detail_bimbingan_mahasiswa WHERE id_mng_pembimbing IN (SELECT id FROM management_pembimbing WHERE status_validasi = 'pending');"
+    try:
+        connection = getdbconn()
+        cursor = connection.cursor(buffered=True)
+        cursor.execute(cmd)
+        result = cursor.fetchall()
+        return result if cursor.rowcount > 0 else []
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return []
+    finally:
+        cursor.close()
+        connection.close()        

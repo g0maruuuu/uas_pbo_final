@@ -48,41 +48,41 @@ class ManagementPembimbingDosen(Frame):
         )
 
         self.canvas.place(x = 0, y = 0)
-        self.image_image_1 = PhotoImage(
+        self._image_image_1 = PhotoImage(
             file=relative_to_assets("image_5.png"))
         image_1 = self.canvas.create_image(
             549.0,
             160.0,
-            image=self.image_image_1
+            image=self._image_image_1
         )
 
-        self.image_image_2 = PhotoImage(file=relative_to_assets("Image_3.png"))
+        self._image_image_2 = PhotoImage(file=relative_to_assets("Image_3.png"))
         image_2 = self.canvas.create_image(
             212.0,
             14.0,
-            image=self.image_image_2
+            image=self._image_image_2
         )
 
-        self.image_image_4 = PhotoImage(
+        self._image_image_4 = PhotoImage(
             file=relative_to_assets("image_4.png"))
         image_4 = self.canvas.create_image(
             187.0,
             312.0,
-            image=self.image_image_4
+            image=self._image_image_4
         )
 
-        self.image_image_3 = PhotoImage(
+        self._image_image_3 = PhotoImage(
             file=relative_to_assets("image_5.png"))
         image_3 = self.canvas.create_image(
             549.0,
             458.0,
-            image=self.image_image_3
+            image=self._image_image_3
         )
 
-        self.button_image_1 = PhotoImage(file=relative_to_assets("button_1.png"))
+        self._button_image_1 = PhotoImage(file=relative_to_assets("button_1.png"))
         button_1 = Button(
             self,
-            image=self.button_image_1,
+            image=self._button_image_1,
             borderwidth=0,
             highlightthickness=0,
             command=self.navigate_to_modul,
@@ -95,20 +95,39 @@ class ManagementPembimbingDosen(Frame):
             width=203.0,
             height=57.0
         )
-        self.columns = {
-            "id": ["id", 139],
-            "nidn": ["nidn", 139],
-            "npm": ["npm", 139],
-            "nama_mahasiswa": ["nama_mahasiswa", 139],
-            "id_bimbingan_mahasiswa": ["id_bimbingan_mahasiswa", 139],
-            "tanggal": ["tanggal", 139],
-            "konsultasi_pembimbing": ["konsultasi_pembimbing", 139],
-            "status_validasi": ["status_validasi", 141],
+        self._button_image_2 = PhotoImage(
+            file=relative_to_assets("button_2.png"))
+        button_2 = Button(
+            self,
+            image=self._button_image_2,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: self.handle_refresh_mng,
+            activebackground="#313131",
+            relief="raised"
+        )
+        button_2.place(
+            x=1050.0,
+            y=5.0,
+            width=42.0,
+            height=42.0
+        )       
+
+
+        self._columns = {
+            "id": ["id", 120],
+            "nidn": ["nidn", 120],
+            "npm": ["npm", 120],
+            "nama_mahasiswa": ["nama_mahasiswa", 120],
+            "id_bimbingan_mahasiswa": ["id_bimbingan_mahasiswa", 120],
+            "tanggal": ["tanggal", 120],
+            "konsultasi_pembimbing": ["konsultasi_pembimbing", 120],
+            "status_validasi": ["status_validasi", 135],
 
         }
-        self.treeview = Treeview(
+        self._treeview = Treeview(
             self,
-            columns=list(self.columns.keys()),
+            columns=list(self._columns.keys()),
             show="headings",
             height=200,
             selectmode="browse",
@@ -117,16 +136,16 @@ class ManagementPembimbingDosen(Frame):
             # font=("Montserrat Bold", 18 * -1)
         )
 
-        for idx, txt in self.columns.items():
-            self.treeview.heading(idx, text=txt[0])
+        for idx, txt in self._columns.items():
+            self._treeview.heading(idx, text=txt[0])
             # Set the column widths
-            self.treeview.column(idx, width=txt[1])
+            self._treeview.column(idx, width=txt[1])
 
-        self.treeview.place(x=62.0, y=29.0, width=975.0, height=262.5)
+        self._treeview.place(x=62.0, y=29.0, width=975.0, height=262.5)
         self.handle_refresh_mng()
         #self.treeview.bind("<ButtonRelease-1>", self.on_treeview_click)
 
-        self.columns_2 = {
+        self._columns_2 = {
             "id": ["id", 139],
             "npm": ["npm", 139],
             "nama_mahasiswa": ["nama_mahasiswa", 139],
@@ -135,9 +154,9 @@ class ManagementPembimbingDosen(Frame):
             "file_skripsi": ["file_skripsi", 139],
             "tanggal": ["tanggal", 139],
         }
-        self.treeview_2 = Treeview(
+        self._treeview_2 = Treeview(
             self,
-            columns=list(self.columns_2.keys()),
+            columns=list(self._columns_2.keys()),
             show="headings",
             height=200,
             selectmode="browse",
@@ -146,26 +165,26 @@ class ManagementPembimbingDosen(Frame):
             # font=("Montserrat Bold", 18 * -1)
         )
 
-        for idx, txt in self.columns_2.items():
-            self.treeview_2.heading(idx, text=txt[0])
+        for idx, txt in self._columns_2.items():
+            self._treeview_2.heading(idx, text=txt[0])
             # Set the column widths
-            self.treeview_2.column(idx, width=txt[1])
+            self._treeview_2.column(idx, width=txt[1])
 
-        self.treeview_2.place(x=62.0, y=327.0, width=975.0, height=262.5)
+        self._treeview_2.place(x=62.0, y=327.0, width=975.0, height=262.5)
         self.handle_refresh_bmbg()
         #self.treeview_2.bind("<ButtonRelease-1>", self.on_treeview_click)
 
     def handle_refresh_mng(self):
-        self.treeview.delete(*self.treeview.get_children())
+        self._treeview.delete(*self._treeview.get_children())
         self.mng_data = db_controller.view_mng(self.user_nidn)
         for row in self.mng_data:
-            self.treeview.insert("", "end", values=row)
+            self._treeview.insert("", "end", values=row)
 
     def handle_refresh_bmbg(self):
-        self.treeview_2.delete(*self.treeview_2.get_children())
-        self.bmbg_data = db_controller.view_pengajuan_bmbg(self.user_nidn)
+        self._treeview_2.delete(*self._treeview_2.get_children())
+        self._bmbg_data = db_controller.view_pengajuan_bmbg(self.user_nidn)
 
-        for row in self.bmbg_data:
+        for row in self._bmbg_data:
             if isinstance(row[5], bytes):
                 detected_encoding = self.detect_encoding(row[5])
                 if detected_encoding:
@@ -182,17 +201,18 @@ class ManagementPembimbingDosen(Frame):
                     row = list(row)  # Convert to list to modify
                     row[5] = "Unknown Encoding"
                     row = tuple(row)  # Convert back to tuple
-            self.treeview_2.insert("", "end", values=row)    
+            self._treeview_2.insert("", "end", values=row)    
     
     def detect_encoding(self, blob_data):
         result = chardet.detect(blob_data)
         return result['encoding']   
     
     def navigate_to_modul(self):
-        selected_item = self.treeview_2.selection()
+        selected_item = self._treeview_2.selection()
         if selected_item:
-            selected_data = self.treeview_2.item(selected_item)['values']
+            selected_data = self._treeview_2.item(selected_item)['values']
             user_nidn = selected_data[4]
             npm = selected_data[1]
             id_bimbingan_mahasiswa = selected_data[0]
-            self.parent.show_modul_pembimbing_dosen(user_nidn, npm, id_bimbingan_mahasiswa)
+            file_skripsi = selected_data[5] 
+            self.parent.show_modul_pembimbing_dosen(user_nidn, npm, id_bimbingan_mahasiswa, file_skripsi)

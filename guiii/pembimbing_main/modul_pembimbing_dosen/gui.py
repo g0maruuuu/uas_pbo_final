@@ -2,6 +2,7 @@ from pathlib import Path
 import tkinter as tk
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame, messagebox, StringVar
 import controller as db_controller
+from tkPDFViewer import tkPDFViewer as pdf
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\py_code\pbo_uas\guiii\pembimbing_main\modul_pembimbing_dosen\assets\frame0")
@@ -16,13 +17,14 @@ def modulpembimbingdosen():
 
 
 class ModulPembimbingDosen(Frame):
-    def __init__(self, parent, user_nidn, npm="", id_bimbingan_mahasiswa="", *args, **kwargs):
+    def __init__(self, parent, user_nidn, npm="", id_bimbingan_mahasiswa="", file_skripsi="", *args, **kwargs):
         Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
         self.user_nidn = user_nidn
         self.npm = npm
         self.id_bimbingan_mahasiswa = id_bimbingan_mahasiswa
         self.status_validasi = None  # Initialize status_validasi
+        self.file_skripsi = file_skripsi
         self.data = {
             "nidn": StringVar(),
             "npm": StringVar(value=npm),
@@ -197,7 +199,7 @@ class ModulPembimbingDosen(Frame):
         )
         entry_tanggal.place(
             x=722.0,
-            y=395.0,
+            y=394.0,
             width=175.0,
             height=43.0
         )
@@ -235,7 +237,8 @@ class ModulPembimbingDosen(Frame):
             width=175.0,
             height=43.0
         )
-
+        if self.file_skripsi:
+            self.open_pdf(self.file_skripsi)
         
 
     def set_status(self, status):
@@ -266,7 +269,32 @@ class ModulPembimbingDosen(Frame):
         if result:
             messagebox.showinfo("Success", "Bimbingan sudah diajukan")
             self.parent.navigate("mng")
+            self.parent.windows.get("mng").handle_refresh_mng()
             for label in self.data.keys():
                 self.data[label].set("")
         else:
             messagebox.showerror("Error", "Unable to add logbook. Please ensure the data is valid.")
+
+
+    def open_pdf(self, pdf_path):
+        
+        self.canvas.delete("pdf_viewer")
+        # Create a new PDF viewer instance
+        pdf_viewer = pdf.ShowPdf()
+        
+        # Integrate the PDF viewer within the existing canvas
+        pdf_display = pdf_viewer.pdf_view(
+            self.canvas,
+            pdf_location=pdf_path,
+            width=200,
+            height=200,
+        )
+        
+        # Place the PDF viewer on the canvas
+        self.canvas.create_window(
+            502, 172,  # Centering the PDF viewer on the canvas
+            window=pdf_display,
+            tags="pdf_viewer",
+            height=256,
+            width=926
+        )         

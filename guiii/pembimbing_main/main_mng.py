@@ -34,18 +34,17 @@ class MainMNG(Frame):
         
 
     def navigate(self, name):
-        # Hide all screens
         print(f"Switching to window: {name}")
-        #if self.current_window:
-            #self.current_window.place_forget()
         for window in self.windows.values():
             window.place_forget()
         self.current_window = self.windows.get(name)
-        self.windows[name].place(x=0, y=0, width=1099, height=666)  
+        if self.current_window:
+            self.current_window.place(x=0, y=0, width=1099, height=666)
+            self.current_window.tkraise() 
 
-    def show_modul_pembimbing_dosen(self, user_nidn, npm, id_bimbingan_mahasiswa):
+    def show_modul_pembimbing_dosen(self, user_nidn, npm, id_bimbingan_mahasiswa, file_skripsi):
         # Create and place ModulPembimbingDosen window with the passed data
-        modul_pembimbing_dosen = ModulPembimbingDosen(self, user_nidn, npm, id_bimbingan_mahasiswa)
+        modul_pembimbing_dosen = ModulPembimbingDosen(self, user_nidn, npm, id_bimbingan_mahasiswa, file_skripsi)
         modul_pembimbing_dosen.place(x=0, y=0, width=1099, height=666)
         modul_pembimbing_dosen.tkraise()
-        self.current_window = modul_pembimbing_dosen    
+        self.current_window = modul_pembimbing_dosen 

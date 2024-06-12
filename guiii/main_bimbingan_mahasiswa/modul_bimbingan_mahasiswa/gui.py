@@ -296,7 +296,7 @@ class ModulBimbinganMahasiswa(Frame):
         if result:
             messagebox.showinfo("Success", "bimbingan sudah diajukan")
             self.parent.navigate("bimb")
-            #self.parent.windows.get("viewlgbk").handle_refresh()
+            self.parent.windows.get("bimb").handle_refresh()
             # clear all fields
             for label in self.data.keys():
                 self.data[label].set("")  

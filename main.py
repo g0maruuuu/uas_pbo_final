@@ -1,7 +1,7 @@
 import tkinter as tk
-from guiii.main_page_admin.gui import mainPageAdmin
+#from guiii.main_page_admin.gui import mainPageAdmin
 #from guiii.main_page.gui import mainpage
-from guiii.login_page.gui import login
+#from guiii.login_page.gui import login
 from guiii.landing_page.gui import landingpage
 
 # Main window constructor
