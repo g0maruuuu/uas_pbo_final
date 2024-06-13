@@ -1,8 +1,5 @@
 from pathlib import Path
-
-# from tkinter import *
-# Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Toplevel
+from tkinter import Tk, Canvas, Button, PhotoImage, Toplevel
 from guiii.main_bimbingan_mahasiswa.main_bimbing import MainBimbing
 from guiii.main_bimbingan_mahasiswa.bimbingan_mahasiswa.gui import BimbinganMahasiswa
 from guiii.main_bimbingan_mahasiswa.modul_bimbingan_mahasiswa.gui import ModulBimbinganMahasiswa
@@ -11,18 +8,13 @@ from guiii.main_logbook.input_logbook.gui import InputLogbook
 from guiii.main_logbook.view_logbook.gui import ViewLogbook
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\py_code\pbo_uas\guiii\main_page\assets\frame0")
-
+ASSETS_PATH = OUTPUT_PATH / Path("./assets/frame0")
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 def mainpage(user_npm):
     MainPage(user_npm)
-#window = Tk()
-
-#window.geometry("1200x700")
-#window.configure(bg = "#303030")
 
 class MainPage(Toplevel):
     def __init__(self, user_npm, *args, **kwargs):
@@ -109,7 +101,7 @@ class MainPage(Toplevel):
             image=button_image_3,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_3 clicked"),
+            command=self.logout,
             activebackground="#283948",
             relief="flat"
         )
@@ -152,8 +144,7 @@ class MainPage(Toplevel):
         else:
             print(f"Error: Window '{name}' not found in windows dictionary")
 
-        
-
-
-#window.resizable(False, False)
-#window.mainloop()
+    def logout(self):
+        self.destroy()
+        from guiii.login_page.gui import Login
+        Login()

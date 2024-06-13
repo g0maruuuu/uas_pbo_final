@@ -3,7 +3,7 @@ from tkinter import *
 from .modul_bimbingan_mahasiswa.gui import ModulBimbinganMahasiswa
 from .bimbingan_mahasiswa.gui import BimbinganMahasiswa
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r".\assets\frame0")
+ASSETS_PATH = OUTPUT_PATH / Path("./assets/frame0")
 
 
 def relative_to_assets(path: str) -> Path:

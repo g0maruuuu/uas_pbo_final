@@ -7,7 +7,7 @@ from ..main_page.gui import mainpage
 #from ..main_page_admin.gui import mainPageAdmin
 import controller as db_controller
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\py_code\pbo_uas\guiii\login_page\assets\frame0")
+ASSETS_PATH = OUTPUT_PATH / Path("./assets/frame0")
 
 
 def relative_to_assets(path: str) -> Path:
@@ -37,19 +37,19 @@ class Login(Toplevel):
     def __init__(self, *args, **kwargs):
         Toplevel.__init__(self, *args, **kwargs)
         self.geometry("1005x623")
-        self.configure(bg = "#313131")
+        self.configure(bg="#313131")
 
         self.canvas = Canvas(
             self,
-            bg = "#313131",
-            height = 623,
-            width = 1005,
-            bd = 0,
-            highlightthickness = 0,
-            relief = "ridge"
+            bg="#313131",
+            height=623,
+            width=1005,
+            bd=0,
+            highlightthickness=0,
+            relief="ridge"
         )
 
-        self.canvas.place(x = 0, y = 0)
+        self.canvas.place(x=0, y=0)
         image_image_1 = PhotoImage(file=relative_to_assets("image_1.png"))
         image_1 = self.canvas.create_image(
             502.0,
@@ -116,10 +116,7 @@ class Login(Toplevel):
             height=67.0
         )
 
-        
-
         self.username.bind("<Return>", lambda x: self.loginFunc())
         self.password.bind("<Return>", lambda x: self.loginFunc())
         self.resizable(False, False)
         self.mainloop()
-    

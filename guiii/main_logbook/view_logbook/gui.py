@@ -11,7 +11,7 @@ import controller as db_controller
 
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\py_code\pbo_uas\guiii\main_logbook\view_logbook\assets\frame0")
+ASSETS_PATH = OUTPUT_PATH / Path("./assets/frame0")
 
 
 def relative_to_assets(path: str) -> Path:

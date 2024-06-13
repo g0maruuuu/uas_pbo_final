@@ -4,7 +4,7 @@ from .view_logbook.gui import ViewLogbook
 from .input_logbook.gui import InputLogbook
 import controller as db_controller
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r".\assets\frame0")
+ASSETS_PATH = OUTPUT_PATH / Path("./assets/frame0")
 
 
 def relative_to_assets(path: str) -> Path:

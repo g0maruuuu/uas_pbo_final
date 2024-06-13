@@ -5,7 +5,7 @@ import controller as db_controller
 from tkPDFViewer import tkPDFViewer as pdf
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\py_code\pbo_uas\guiii\pembimbing_main\modul_pembimbing_dosen\assets\frame0")
+ASSETS_PATH = OUTPUT_PATH / Path("./assets/frame0")
 
 
 def relative_to_assets(path: str) -> Path:

@@ -12,7 +12,7 @@ from guiii.login_page.gui  import Login
 from guiii.login_page_dosen.gui import LoginDosen
 import controller as db_controller
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\py_code\pbo_uas\guiii\landing_page\assets\frame0")
+ASSETS_PATH = OUTPUT_PATH / Path("./assets/frame0")
 
 
 def relative_to_assets(path: str) -> Path:

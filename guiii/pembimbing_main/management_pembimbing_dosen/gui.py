@@ -1,32 +1,17 @@
 from pathlib import Path
-
-# from tkinter import *
-# Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame
 from tkPDFViewer import tkPDFViewer as pdf
 from tkinter.ttk import Treeview
 import controller as db_controller
 import chardet
-#from guiii.pembimbing_main.modul_pembimbing_dosen.gui import ModulPembimbingDosen
-#from guiii.pembimbing_main.main_mng import MainMNG
-#from guiii.management_pembimbing_dosen.main_mng import navigate
-
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\py_code\pbo_uas\guiii\pembimbing_main\management_pembimbing_dosen\assets\frame0")
+ASSETS_PATH = OUTPUT_PATH / Path("./assets/frame0")
 
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-#def nav():
-    #MainMNG
-
-
-#window = Tk()
-
-#window.geometry("1005x623")
-#window.configure(bg = "#313131")
 def managementpembimbingdosen():
     ManagementPembimbingDosen()
 
@@ -102,7 +87,7 @@ class ManagementPembimbingDosen(Frame):
             image=self._button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: self.handle_refresh_mng,
+            command=lambda : self.handle_refresh_mng(),
             activebackground="#313131",
             relief="raised"
         )
@@ -123,7 +108,6 @@ class ManagementPembimbingDosen(Frame):
             "tanggal": ["tanggal", 120],
             "konsultasi_pembimbing": ["konsultasi_pembimbing", 120],
             "status_validasi": ["status_validasi", 135],
-
         }
         self._treeview = Treeview(
             self,
@@ -131,19 +115,14 @@ class ManagementPembimbingDosen(Frame):
             show="headings",
             height=200,
             selectmode="browse",
-            # ="#FFFFFF",
-            # fg="#5E95FF",
-            # font=("Montserrat Bold", 18 * -1)
         )
 
         for idx, txt in self._columns.items():
             self._treeview.heading(idx, text=txt[0])
-            # Set the column widths
             self._treeview.column(idx, width=txt[1])
 
         self._treeview.place(x=62.0, y=29.0, width=975.0, height=262.5)
         self.handle_refresh_mng()
-        #self.treeview.bind("<ButtonRelease-1>", self.on_treeview_click)
 
         self._columns_2 = {
             "id": ["id", 139],
@@ -160,9 +139,6 @@ class ManagementPembimbingDosen(Frame):
             show="headings",
             height=200,
             selectmode="browse",
-            # ="#FFFFFF",
-            # fg="#5E95FF",
-            # font=("Montserrat Bold", 18 * -1)
         )
 
         for idx, txt in self._columns_2.items():
