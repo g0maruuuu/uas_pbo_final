@@ -12,7 +12,7 @@ from tkPDFViewer import tkPDFViewer as pdf
 import controller as db_controller
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\py_code\pbo_uas\guiii\main_bimbingan_mahasiswa\modul_bimbingan_mahasiswa\assets\frame0")
+ASSETS_PATH = OUTPUT_PATH / Path("./assets/frame0")
 
 
 def relative_to_assets(path: str) -> Path:
