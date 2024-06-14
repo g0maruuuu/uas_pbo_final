@@ -28,6 +28,6 @@ user (mahasiswa)
    pass     : 123
 
 2. username : mahasiswa_2
-   pass     : 1234
+   pass     : 123
 
    npm masing2 2332002 dan 2332053
