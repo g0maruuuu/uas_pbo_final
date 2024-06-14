@@ -160,7 +160,7 @@ class BimbinganMahasiswa(Frame):
             "id_detail": ["id_detail", 164],
             "npm": ["npm", 164],
             "tanggal": ["tanggal", 164],
-            "konsultasi_pembimbing": ["tanggal", 164],
+            "konsultasi_pembimbing": ["konsultasi_pembimbing", 164],
             "status_validasi": ["status_validasi", 163],
             "file_skripsi": ["file_skripsi", 164],
         }
